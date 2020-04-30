@@ -75,12 +75,29 @@ struct BookItem: Hashable {
 
 class BooksViewController: UIViewController {
     
+    var objects = BookItem.getBooks()
+    
     enum Section: Int {
-        case activeNow = 0, psyhology, children, novels, detectives
+        case activeNow = 0, psychology, children, novels, detectives
+        
+        func description() -> String {
+            switch self {
+            case .activeNow:
+                return "ВАШ ВЫБОР"
+            case .psychology:
+                return "ПСИХОЛОГИЯ, МОТИВАЦИЯ"
+            case .children:
+                 return "ДЕТСКИЕ КНИГИ"
+            case .novels:
+                return "ЛЮБОВНЫЕ РОМАНЫ"
+            case .detectives:
+                return "ДЕТЕКТИВЫ"
+            }
+        }
     }
     
     var tableView: UITableView!
-    var dataSource: UITableViewDiffableDataSource<Section, BookItem>!
+    var dataSource: DataSource!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -90,8 +107,28 @@ class BooksViewController: UIViewController {
         configureDataSource()
     }
     
+    func initialSnapshot() -> NSDiffableDataSourceSnapshot<Section, BookItem> {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, BookItem>()
+        
+        snapshot.appendSections([.activeNow])
+        snapshot.appendItems([], toSection: .activeNow)
+        snapshot.appendSections([.psychology])
+        snapshot.appendItems(objects.filter({ $0.genre == .psychology}), toSection: .psychology)
+        
+        snapshot.appendSections([.children])
+        snapshot.appendItems(objects.filter({ $0.genre == .children}), toSection: .children)
+        
+        snapshot.appendSections([.novels])
+        snapshot.appendItems(objects.filter({ $0.genre == .novels}), toSection: .novels)
+        
+        snapshot.appendSections([.detectives])
+        snapshot.appendItems(objects.filter({ $0.genre == .detectives}), toSection: .detectives)
+        
+        return snapshot
+    }
+    
     func configureDataSource() {
-        dataSource = UITableViewDiffableDataSource<Section, BookItem>(tableView: tableView, cellProvider: { (tableView, indexPath, bookItem) -> UITableViewCell? in
+        dataSource = DataSource(tableView: tableView, cellProvider: { (tableView, indexPath, bookItem) -> UITableViewCell? in
             var cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
             cell = UITableViewCell(style: UITableViewCell.CellStyle.value1, reuseIdentifier: "cell")
             cell.textLabel?.text = bookItem.name
@@ -99,6 +136,9 @@ class BooksViewController: UIViewController {
             cell.editingAccessoryType = UITableViewCell.AccessoryType.disclosureIndicator
             return cell
         })
+        
+        let snapshot = initialSnapshot()
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 }
 
@@ -107,6 +147,9 @@ extension BooksViewController {
     func setupElements() {
         view.backgroundColor = .systemBackground
         tableView = UITableView(frame: .zero, style: .grouped)
+        tableView.setEditing(true, animated: true)
+        tableView.delegate = self
+        tableView.allowsSelectionDuringEditing = true
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         title = "Pocked Reader"
@@ -125,6 +168,54 @@ extension BooksViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         
         ])
+    }
+}
+
+// MARK: - Data Source
+extension BooksViewController {
+    class DataSource: UITableViewDiffableDataSource<Section, BookItem> {
+        override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+            let sectionKind = Section(rawValue: section)
+            return sectionKind?.description()
+        }
+        
+        override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+            if section == 0 {
+                return "Добавляй в эту секцию те книги, которые хочешь прочитать!"
+            } else {
+                return nil
+            }
+        }
+        
+        override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+            return true
+        }
+        
+        override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+            if editingStyle == .insert {
+                
+            }
+            if editingStyle == .delete {
+                
+            }
+        }
+    }
+}
+
+// MARK: - UITableViewDelegate
+extension BooksViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        if indexPath.section == 0 {
+            return .delete
+        } else {
+            return .insert
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        guard let bookItem = self.dataSource.itemIdentifier(for: indexPath) else { return }
+        print(bookItem.name)
     }
 }
 
