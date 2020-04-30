@@ -94,6 +94,21 @@ class BooksViewController: UIViewController {
                 return "ДЕТЕКТИВЫ"
             }
         }
+        
+        func genreType() -> GenreType {
+            switch self {
+            case .activeNow:
+                return .activeNow
+            case .psychology:
+                return .psychology
+            case .children:
+                return .children
+            case .novels:
+                return .novels
+            case .detectives:
+                return .detectives
+            }
+        }
     }
     
     var tableView: UITableView!
@@ -193,10 +208,33 @@ extension BooksViewController {
         
         override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
             if editingStyle == .insert {
+                let destinationIndexPath = IndexPath(row: 0, section: 0)
+                guard let sourceIdentifier = itemIdentifier(for: indexPath) else { return }
+                let destinationIdentifier = itemIdentifier(for: destinationIndexPath)
                 
+                var snapshot = self.snapshot()
+                
+                if let destinationIdentifier = destinationIdentifier {
+                    snapshot.deleteItems([sourceIdentifier])
+                    snapshot.insertItems([sourceIdentifier], beforeItem: destinationIdentifier)
+                    apply(snapshot)
+                } else {
+                    let destinationSectionIdentifier = snapshot.sectionIdentifiers[destinationIndexPath.section]
+                    snapshot.deleteItems([sourceIdentifier])
+                    snapshot.appendItems([sourceIdentifier], toSection: destinationSectionIdentifier)
+                    apply(snapshot)
+                }
             }
             if editingStyle == .delete {
-                
+                guard let sourceIdentifier = itemIdentifier(for: indexPath) else { return }
+                var snapshot = self.snapshot()
+                for section in snapshot.sectionIdentifiers {
+                    if section.genreType() == sourceIdentifier.genre {
+                        snapshot.deleteItems([sourceIdentifier])
+                        snapshot.appendItems([sourceIdentifier], toSection: section)
+                        apply(snapshot)
+                    }
+                }
             }
         }
     }
