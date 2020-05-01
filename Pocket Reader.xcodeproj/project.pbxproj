@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F0247B7F245C317A008EDDF3 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0247B7E245C317A008EDDF3 /* UserSettings.swift */; };
+		F0247B81245C32B6008EDDF3 /* BookItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0247B80245C32B6008EDDF3 /* BookItem.swift */; };
 		F0391660245ADB40009496A7 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F039165F245ADB40009496A7 /* DetailViewController.swift */; };
 		F0391662245ADF7C009496A7 /* StackView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0391661245ADF7C009496A7 /* StackView + Extension.swift */; };
 		F07240622459DC6D00937E8F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07240612459DC6D00937E8F /* AppDelegate.swift */; };
@@ -67,6 +69,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F0247B7E245C317A008EDDF3 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
+		F0247B80245C32B6008EDDF3 /* BookItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookItem.swift; sourceTree = "<group>"; };
 		F039165F245ADB40009496A7 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		F0391661245ADF7C009496A7 /* StackView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StackView + Extension.swift"; sourceTree = "<group>"; };
 		F072405E2459DC6D00937E8F /* Pocket Reader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pocket Reader.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -132,7 +136,9 @@
 				F07240612459DC6D00937E8F /* AppDelegate.swift */,
 				F07240632459DC6D00937E8F /* SceneDelegate.swift */,
 				F07240652459DC6D00937E8F /* BooksViewController.swift */,
+				F0247B80245C32B6008EDDF3 /* BookItem.swift */,
 				F039165F245ADB40009496A7 /* DetailViewController.swift */,
+				F0247B7E245C317A008EDDF3 /* UserSettings.swift */,
 				F0391661245ADF7C009496A7 /* StackView + Extension.swift */,
 				F07240672459DC6D00937E8F /* Main.storyboard */,
 				F072406A2459DC6F00937E8F /* Assets.xcassets */,
@@ -296,7 +302,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F07240662459DC6D00937E8F /* BooksViewController.swift in Sources */,
+				F0247B7F245C317A008EDDF3 /* UserSettings.swift in Sources */,
 				F07240622459DC6D00937E8F /* AppDelegate.swift in Sources */,
+				F0247B81245C32B6008EDDF3 /* BookItem.swift in Sources */,
 				F07240642459DC6D00937E8F /* SceneDelegate.swift in Sources */,
 				F0391660245ADB40009496A7 /* DetailViewController.swift in Sources */,
 				F0391662245ADF7C009496A7 /* StackView + Extension.swift in Sources */,
